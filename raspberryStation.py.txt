@@ -1,0 +1,24 @@
+import serial
+import paho.mqtt.client as mqtt
+import time
+
+client=mqtt.Client()
+client.username_pw_set("lenbaxjq","Cp6Gt00Sq3Ra")#replace with your user name and password
+client.connect("m13.cloudmqtt.com",13336,60)
+
+len = 180 #cm
+
+ser = serial.Serial('/dev/ttyAMA0', 9600)
+while True:
+   while ser.in_waiting:
+       rx = ser.readline()
+       rx = rx.strip()
+       rx = float(rx)*27.77778
+       #rx = rx.split('|')
+       tim = (len/rx)
+       print(rx)
+       #print(str(rx[1]) + "km/h")
+       print(str(tim) + "s")
+       #client.publish("pi", rx + str(kmh))
+       thoigian =(str(tim) + "s")
+       client.publish("Train", thoigian)
